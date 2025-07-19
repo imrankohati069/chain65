@@ -52,7 +52,7 @@
       cursor: pointer;
       border-radius: 5px;
       margin-bottom: 10px;
-       box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
     }
     .footer {
       background: rgb(0, 0, 0);
@@ -87,11 +87,14 @@
       padding: 10px 20px;
       border-radius: 5px;
     }
+    .note {
+      font-size: 10px;
+      color: gray;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-  </div>
+  <div class="header"></div>
 
   <div class="sections">
     <div class="invite-section">
@@ -99,6 +102,7 @@
       <button onclick="shareWhatsApp()">📲 WhatsApp</button><br/>
       <button onclick="shareTelegram()">✈️ Telegram</button><br/>
       <button onclick="shareFacebook()">📘 Facebook</button>
+      <p class="note">* WhatsApp/Facebook sharing may not work inside Telegram app. Open in browser for full features.</p>
     </div>
 
     <div class="copy-url-section">
@@ -116,8 +120,8 @@
     <a class="nav-item" href="white-paper.html">White paper</a>
   </div>
 
- <script>
-  const referralBase = "t.me/Chain65bot";
+<script>
+  const referralBase = "https://t.me/Chain65bot";
 
   let userRefCode = localStorage.getItem("userRefCode");
   if (!userRefCode) {
@@ -126,36 +130,35 @@
   }
 
   const referralUrl = `${referralBase}?start=${userRefCode}`;
+  const encodedReferral = encodeURIComponent(referralUrl);
+  const shareMessage = `🚀 Join Chain65 and earn rewards! 💰`;
 
-  function goBack() {
-    window.history.back();
-  }
-
-  // Native share functions calling Android interface
   function shareWhatsApp() {
-    const message = `🚀 Join Chain65 and earn rewards! 💰\n${referralUrl}`;
+    const fullMessage = `${shareMessage} ${referralUrl}`;
     if (window.Android && window.Android.shareWhatsApp) {
-      window.Android.shareWhatsApp(message);
+      window.Android.shareWhatsApp(fullMessage);
     } else {
-      alert("WhatsApp sharing not available");
+      window.open(`https://wa.me/?text=${encodeURIComponent(fullMessage)}`, '_blank');
     }
   }
 
   function shareTelegram() {
-    const message = `🚀 Join Chain65 and earn rewards! 💰\n${referralUrl}`;
+    const telegramShareURL = `https://t.me/share/url?url=${encodedReferral}&text=${encodeURIComponent(shareMessage)}`;
     if (window.Android && window.Android.shareTelegram) {
-      window.Android.shareTelegram(message);
+      window.Android.shareTelegram(`${shareMessage}\n${referralUrl}`);
+    } else if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.openTelegramLink(telegramShareURL);
     } else {
-      alert("Telegram sharing not available");
+      window.open(telegramShareURL, '_blank');
     }
   }
 
   function shareFacebook() {
-    const message = `🚀 Join Chain65 and earn rewards! 💰\n${referralUrl}`;
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedReferral}`;
     if (window.Android && window.Android.shareFacebook) {
-      window.Android.shareFacebook(message);
+      window.Android.shareFacebook(`${shareMessage}\n${referralUrl}`);
     } else {
-      alert("Facebook sharing not available");
+      window.open(fbUrl, '_blank');
     }
   }
 
