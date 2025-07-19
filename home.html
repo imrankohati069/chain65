@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chain65</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.cdnfonts.com/css/digital-7" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color:rgba(0, 0, 0, 0.993);
+      color: rgb(255, 255, 255);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #000000;
+      color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgb(255, 255, 255);
+    }
+
+    .coins {
+      margin-top: 100px;
+      font-size: 40px;
+      font-weight: bold;
+    }
+    .tokenLabel {
+  font-size: 14px;
+  background-color: #111;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: inline-block;
+  letter-spacing: 2px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.993);
+}
+
+
+    .circle-mine {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, #000000, #000000);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 40px;
+      box-shadow: 0 4px 20px  rgba(255, 255, 255, 0.993);
+      cursor: pointer;
+      flex-direction: column;
+    }
+
+    .blinking {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    #timerText {
+  font-size: 24px;
+  background-color: #111;
+  color:rgba(255, 255, 255, 0.993);
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: inline-block;
+  letter-spacing: 2px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.993);
+}
+#coinBalance {
+  font-size: 24px;
+  background-color: #111;
+  color: rgb(255, 255, 255);
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: inline-block;
+  letter-spacing: 2px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.993);
+}
+
+
+
+    .popup-content {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+      max-width: 90%;
+      text-align: left;
+    }
+
+    .popup-content button {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.993);
+      border: none;
+      padding: 8px 16px;
+      color: rgb(0, 0, 0);
+      cursor: pointer;
+    }
+
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .footer .nav-item {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 8px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+      text-align: center;
+      width: 80px;
+    }
+
+    .footer a {
+      text-decoration: none;
+      color: white;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .footer i {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+   .extra-buttons {
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.glow-btn {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 90px;
+  text-align: center;
+}
+
+.glow-btn:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+
+
+    .coming-soon {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(255, 255, 255, 0.993);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div id="username" class="user-id"></div>
+  </div>
+
+  <div class="coins">
+  <span id="coinBalance">0</span> <span class="tokenLabel">C65 Coin</span>
+</div>
+
+
+  <div id="mineCircle" class="circle-mine" onclick="startMining()">
+    <div id="mineText">Tap to Mine</div>
+    <div id="timerText"></div>
+  </div>
+<div class="extra-buttons">
+  <div class="glow-btn" onclick="togglePopup('aboutPopup')">About Us</div>
+  <div class="glow-btn" onclick="togglePopup('supportPopup')">Support</div>
+  <div class="glow-btn" onclick="togglePopup('comingSoonPopup')">Wallet</div>
+</div>
+
+
+  <div class="popup" id="aboutPopup">
+    <div class="popup-content">
+      <h3>About Chain65</h3>
+      <p>Chain65 is a revolutionary Web3 platform allowing users to mine digital value with a single tap. Earn tokens daily and be part of the decentralized future. The more you engage, the more you earn!</p>
+      <button onclick="togglePopup('aboutPopup')">Close</button>
+    </div>
+  </div>
+
+  <div class="popup" id="supportPopup">
+    <div class="popup-content">
+      <h3>Support</h3>
+      <p>If you have questions, contact us at:</p>
+      <p><strong>Email:</strong> <a style="color:orange" href="https://mail.google.com/mail/?view=cm&fs=1&to=dotnetworkcontact@gmail.com" target="_blank" style="color:orange">chain65contact@gmail.com</a>
+      </p>
+      <button onclick="togglePopup('supportPopup')">Close</button>
+    </div>
+  </div>
+
+  <div class="popup" id="comingSoonPopup">
+    <div class="popup-content">
+      <p>Coming Soon</p>
+      <button onclick="togglePopup('comingSoonPopup')">Close</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="nav-item">
+      <a href="home.html">
+        <i class="fas fa-home"></i> Home
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="invite-friends.html">
+        <i class="fas fa-user-friends"></i> Friends
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="White paper.html">
+        <i class="fas fa-tasks"></i> White paper
+      </a>
+    </div>
+  </div>
+
+  <script>
+let mining = false;
+let coinBalance = parseFloat(localStorage.getItem("coinBalance")) || 0;
+let miningEnd = parseInt(localStorage.getItem("miningEnd")) || 0;
+let miningInterval;
+
+function updateBalance() {
+  document.getElementById("coinBalance").innerText = Number(coinBalance).toFixed(5);
+}
+
+function formatTime(ms) {
+  let totalSeconds = Math.floor(ms / 1000);
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  let seconds = totalSeconds % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function runMiningTimer() {
+  mining = true;
+  document.getElementById("mineCircle").classList.add("blinking");
+  document.getElementById("mineText").innerText = "Mining...";
+
+  miningInterval = setInterval(() => {
+    const now = Date.now();
+    const remaining = miningEnd - now;
+
+    if (remaining <= 0) {
+      clearInterval(miningInterval);
+      mining = false;
+      document.getElementById("mineCircle").classList.remove("blinking");
+      document.getElementById("mineText").innerText = "Tap to Mine";
+      document.getElementById("timerText").innerText = "";
+      localStorage.removeItem("miningEnd");
+      localStorage.removeItem("lastUpdate");
+      return;
+    }
+
+    const lastUpdate = parseInt(localStorage.getItem("lastUpdate")) || now;
+    const secondsPassed = Math.floor((now - lastUpdate) / 1000);
+    if (secondsPassed >= 1) {
+      coinBalance += 0.00001 * secondsPassed;
+      coinBalance = parseFloat(coinBalance.toFixed(5));
+      localStorage.setItem("coinBalance", coinBalance);
+      localStorage.setItem("lastUpdate", now);
+      updateBalance();
+    }
+
+    document.getElementById("timerText").innerText = formatTime(remaining);
+  }, 1000);
+}
+
+function startMining() {
+  if (mining) return;
+
+  const now = Date.now();
+  if (now < miningEnd) {
+    alert("Mining already in progress. Please wait.");
+    return;
+  }
+
+  miningEnd = now + 86400000; // 24 hours
+  localStorage.setItem("miningEnd", miningEnd);
+  localStorage.setItem("lastUpdate", now);
+  runMiningTimer();
+}
+
+function resumeMiningIfActive() {
+  const now = Date.now();
+  if (now < miningEnd) {
+    runMiningTimer();
+  } else {
+    localStorage.removeItem("miningEnd");
+    localStorage.removeItem("lastUpdate");
+  }
+}
+
+
+function togglePopup(id) {
+  const popup = document.getElementById(id);
+  popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  coinBalance = parseFloat(localStorage.getItem("coinBalance")) || 0;
+  updateBalance();
+  resumeMiningIfActive();
+});
+</script>
+</body>
+</html>

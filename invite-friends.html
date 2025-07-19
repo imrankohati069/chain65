@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chain65 - Friends</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #000000;
+      color: rgb(255, 255, 255);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 80vh;
+    }
+    .header {
+      width: 100%;
+      background: rgb(0, 0, 0);
+      padding: 2px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+    }
+    .sections {
+      width: 90%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .invite-section, .copy-url-section {
+      background: rgb(0, 0, 0);
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+    }
+    button {
+      background-color: rgba(0, 0, 0, 0.993);
+      color: rgb(255, 254, 254);
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 10px;
+       box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+    }
+    .footer {
+      background: rgb(0, 0, 0);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 254, 254, 0.993);
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+    .nav-item {
+      text-decoration: none;
+      color: rgb(255, 255, 255);
+      font-size: 12px;
+      padding: 10px;
+      background: rgb(0, 0, 0);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.993);
+      text-align: center;
+      width: 80px;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+  </div>
+
+  <div class="sections">
+    <div class="invite-section">
+      <p>📢 Invite your friends via:</p>
+      <button onclick="shareWhatsApp()">📲 WhatsApp</button><br/>
+      <button onclick="shareTelegram()">✈️ Telegram</button><br/>
+      <button onclick="shareFacebook()">📘 Facebook</button>
+    </div>
+
+    <div class="copy-url-section">
+      <button onclick="copyReferralLink()">🔗 Copy Referral URL</button>
+    </div>
+
+    <p>Referrals: <span id="refCount">0</span></p>
+  </div>
+
+  <div class="popup" id="popup">Link Copied!</div>
+
+  <div class="footer">
+    <a class="nav-item" href="home.html">Home</a>
+    <a class="nav-item" href="friends.html">Friends</a>
+    <a class="nav-item" href="White paper.html">White paper</a>
+  </div>
+
+ <script>
+  const referralBase = "https://imrankohati069.github.io/Dot-network/";
+
+  let userRefCode = localStorage.getItem("userRefCode");
+  if (!userRefCode) {
+    userRefCode = "ref_" + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem("userRefCode", userRefCode);
+  }
+
+  const referralUrl = `${referralBase}?start=${userRefCode}`;
+
+  function goBack() {
+    window.history.back();
+  }
+
+  // Native share functions calling Android interface
+  function shareWhatsApp() {
+    const message = `🚀 Join Chain65 and earn rewards! 💰\n${referralUrl}`;
+    if (window.Android && window.Android.shareWhatsApp) {
+      window.Android.shareWhatsApp(message);
+    } else {
+      alert("WhatsApp sharing not available");
+    }
+  }
+
+  function shareTelegram() {
+    const message = `🚀 Join Chain65 and earn rewards! 💰\n${referralUrl}`;
+    if (window.Android && window.Android.shareTelegram) {
+      window.Android.shareTelegram(message);
+    } else {
+      alert("Telegram sharing not available");
+    }
+  }
+
+  function shareFacebook() {
+    const message = `🚀 Join Chain65 and earn rewards! 💰\n${referralUrl}`;
+    if (window.Android && window.Android.shareFacebook) {
+      window.Android.shareFacebook(message);
+    } else {
+      alert("Facebook sharing not available");
+    }
+  }
+
+  function copyReferralLink() {
+    navigator.clipboard.writeText(referralUrl)
+      .then(() => showPopup())
+      .catch(() => alert('Failed to copy link. Try manually.'));
+  }
+
+  function showPopup() {
+    const popup = document.getElementById("popup");
+    popup.style.display = "block";
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 2000);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get("ref");
+
+    if (ref && !localStorage.getItem("refClaimed_" + ref)) {
+      let currentTokens = parseFloat(localStorage.getItem("coinBalance")) || 0;
+      currentTokens += 1;
+      localStorage.setItem("coinBalance", currentTokens);
+
+      let referrals = parseInt(localStorage.getItem("referrals")) || 0;
+      referrals += 1;
+      localStorage.setItem("referrals", referrals);
+
+      localStorage.setItem("refClaimed_" + ref, "true");
+      alert("🎉 You received 1 bonus token from referral!");
+    }
+
+    document.getElementById("refCount").innerText = localStorage.getItem("referrals") || 0;
+  });
+</script>
+
+</body>
+</html>
