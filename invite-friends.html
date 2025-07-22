@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Invite Friends | Chain65</title>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
@@ -27,11 +27,11 @@
       color: #ffffff;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgb(255, 255, 255);
+      z-index: 10;
     }
-
     .container {
       max-width: 500px;
-      margin: 20px auto;
+      margin: 60px auto 80px; /* top margin for fixed header, bottom for footer */
       padding: 20px;
     }
     .card {
@@ -75,6 +75,7 @@
       color: rgb(0, 0, 0);
       text-align: center;
       margin-bottom: 10px;
+      font-weight: bold;
     }
     .btn {
       background: #494848;
@@ -102,6 +103,7 @@
       display: flex;
       gap: 10px;
       margin-top: 15px;
+      justify-content: center;
     }
     .share-btn {
       flex: 1;
@@ -110,15 +112,26 @@
       color: white;
       cursor: pointer;
       box-shadow: 0 4px 15px rgb(255, 255, 255);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: bold;
+      user-select: none;
+      background: #222;
+      transition: background-color 0.3s;
+    }
+    .share-btn:hover {
+      background: #555;
     }
     .whatsapp {
-      background: #000000;
+      background: #25d366;
     }
     .telegram {
-      background: #000000;
+      background: #0088cc;
     }
     .facebook {
-      background: #000000;
+      background: #3b5998;
     }
     .footer {
       position: fixed;
@@ -129,6 +142,7 @@
       display: flex;
       justify-content: space-around;
       box-shadow: 0 4px 15px rgb(255, 255, 255);
+      z-index: 10;
     }
     .nav-item {
       text-decoration: none;
@@ -139,6 +153,10 @@
       border-radius: 5px;
       width: 80px;
       box-shadow: 0 4px 15px rgb(255, 255, 255);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
     .popup {
       position: fixed;
@@ -157,7 +175,7 @@
 </head>
 <body>
   <div class="header">
-    
+    <h2>Chain65 Referral</h2>
   </div>
 
   <div class="container">
@@ -178,20 +196,20 @@
     <div class="card">
       <h3>Your Referral Link</h3>
       <div class="referral-link">
-        <input type="text" id="referralLink" readonly>
+        <input type="text" id="referralLink" readonly />
         <button class="btn btn-copy" onclick="copyReferralLink()">Copy Link</button>
       </div>
       <p>Share your link and earn rewards when friends join!</p>
-      
+
       <div class="share-buttons">
         <div class="share-btn whatsapp" onclick="shareWhatsApp()">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </div>
         <div class="share-btn telegram" onclick="shareTelegram()">
-          <i class="fab fa-telegram"></i> Telegram 
+          <i class="fab fa-telegram"></i> Telegram
         </div>
         <div class="share-btn facebook" onclick="shareFacebook()">
-          <i class="fab fa-facebook"></i> Facebook
+          <i class="fab fa-facebook-f"></i> Facebook
         </div>
       </div>
     </div>
@@ -207,14 +225,13 @@
       <i class="fas fa-user-friends"></i> Friends
     </a>
     <a class="nav-item" href="white-paper.html">
-      <i class="fas fa-tasks"></i> White paper
+      <i class="fas fa-file-alt"></i> White paper
     </a>
   </div>
 
-  <!-- Firebase SDK -->
-<script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
@@ -233,12 +250,10 @@
     let currentUserId = null;
     let userData = null;
 
-    // Initialize auth
     signInAnonymously(auth)
       .then(() => console.log("Signed in anonymously"))
       .catch(error => console.error("Auth error:", error));
 
-    // Track auth state
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUserId = user.uid;
@@ -250,11 +265,10 @@
     async function loadUserData() {
       const userRef = doc(db, "users", currentUserId);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         userData = userSnap.data();
       } else {
-        // Create user if doesn't exist
         await setDoc(userRef, {
           createdAt: new Date(),
           referralCode: generateReferralCode(),
@@ -276,34 +290,38 @@
 
     function updateUI() {
       if (!userData) return;
-      
+
       document.getElementById("referralCount").textContent = userData.referrals || 0;
       document.getElementById("referralBonus").textContent = (userData.referralBonus || 0).toFixed(5) + " C65";
-      
+
       const currentUrl = window.location.href.split('?')[0].replace('invite-friends.html', '');
       document.getElementById("referralLink").value = `${currentUrl}?ref=${userData.referralCode}`;
     }
 
-    window.copyReferralLink = function() {
+    window.copyReferralLink = function () {
       const referralLink = document.getElementById("referralLink");
       referralLink.select();
       document.execCommand("copy");
       showPopup("Link copied!");
     };
 
-    window.shareWhatsApp = function() {
+    window.shareWhatsApp = function () {
       const link = document.getElementById("referralLink").value;
-      const message = `Join Chain65 and earn crypto! Use my referral link: ${link}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+      const message = "Join Chain65 and earn crypto!";
+      // WhatsApp sharing with message and link separated properly
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}%20${encodeURIComponent(link)}`, "_blank");
     };
 
-    window.shareTelegram = function() {
-      window.open("https://t.me/Chain65bot", "_blank");
+    window.shareTelegram = function () {
+      const message = "Join Chain65 and earn crypto!";
+      const url = document.getElementById("referralLink").value;
+      const telegramShareURL = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(message)}`;
+      window.open(telegramShareURL, "_blank");
     };
 
-    window.shareFacebook = function() {
+    window.shareFacebook = function () {
       const link = document.getElementById("referralLink").value;
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank');
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, "_blank");
     };
 
     function showPopup(message) {
