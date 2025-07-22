@@ -213,11 +213,13 @@
 
   <!-- Firebase SDK -->
   
-     <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
+<!-- Your Main JS -->
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyC2klHcVeyNOl5etmxb0N9hZlBUCN-g6YA",
     authDomain: "chain-65-network.firebaseapp.com",
@@ -227,18 +229,18 @@
     appId: "1:1044867567779:web:3f9d71c9d08f4cf7beaf16"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
 
   let currentUserId = null;
   let userData = null;
 
-  signInAnonymously(auth)
+  auth.signInAnonymously()
     .then(() => console.log("Signed in anonymously"))
     .catch(error => console.error("Auth error:", error));
 
-  onAuthStateChanged(auth, async (user) => {
+  auth.onAuthStateChanged(async (user) => {
     if (user) {
       currentUserId = user.uid;
       await loadUserData();
@@ -247,19 +249,19 @@
   });
 
   async function loadUserData() {
-    const userRef = doc(db, "users", currentUserId);
-    const userSnap = await getDoc(userRef);
-    
-    if (userSnap.exists()) {
+    const userRef = db.collection("users").doc(currentUserId);
+    const userSnap = await userRef.get();
+
+    if (userSnap.exists) {
       userData = userSnap.data();
     } else {
-      await setDoc(userRef, {
+      await userRef.set({
         createdAt: new Date(),
         referralCode: generateReferralCode(),
         referrals: 0,
         referralBonus: 0
       });
-      userData = (await getDoc(userRef)).data();
+      userData = (await userRef.get()).data();
     }
   }
 
@@ -276,9 +278,18 @@
     if (!userData) return;
     document.getElementById("referralCount").textContent = userData.referrals || 0;
     document.getElementById("referralBonus").textContent = (userData.referralBonus || 0).toFixed(5) + " C65";
-    
+
     const baseUrl = window.location.href.split('?')[0].replace('invite-friends.html', '');
     document.getElementById("referralLink").value = `${baseUrl}?ref=${userData.referralCode}`;
+  }
+
+  function showPopup(message) {
+    const popup = document.getElementById("popup");
+    popup.textContent = message;
+    popup.style.display = "block";
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 2000);
   }
 
   window.copyReferralLink = function () {
@@ -310,15 +321,7 @@
     const link = `${baseUrl}?ref=${userData.referralCode}`;
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank');
   };
-
-  function showPopup(message) {
-    const popup = document.getElementById("popup");
-    popup.textContent = message;
-    popup.style.display = "block";
-    setTimeout(() => {
-      popup.style.display = "none";
-    }, 2000);
-  }
 </script>
+
 </body>
 </html>
