@@ -157,7 +157,7 @@
 </head>
 <body>
   <div class="header">
-    
+    <!-- Empty header for now -->
   </div>
 
   <div class="container">
@@ -212,9 +212,9 @@
   </div>
 
   <!-- Firebase SDK -->
-<script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
@@ -233,12 +233,10 @@
     let currentUserId = null;
     let userData = null;
 
-    // Initialize auth
     signInAnonymously(auth)
       .then(() => console.log("Signed in anonymously"))
       .catch(error => console.error("Auth error:", error));
 
-    // Track auth state
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUserId = user.uid;
@@ -254,7 +252,6 @@
       if (userSnap.exists()) {
         userData = userSnap.data();
       } else {
-        // Create user if doesn't exist
         await setDoc(userRef, {
           createdAt: new Date(),
           referralCode: generateReferralCode(),
@@ -276,7 +273,6 @@
 
     function updateUI() {
       if (!userData) return;
-      
       document.getElementById("referralCount").textContent = userData.referrals || 0;
       document.getElementById("referralBonus").textContent = (userData.referralBonus || 0).toFixed(5) + " C65";
       
@@ -298,7 +294,9 @@
     };
 
     window.shareTelegram = function() {
-      window.open("https://t.me/Chain65bot", "_blank");
+      const link = document.getElementById("referralLink").value;
+      const message = `Join Chain65 and earn crypto! Use my referral link: ${link}`;
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)}`, '_blank');
     };
 
     window.shareFacebook = function() {
