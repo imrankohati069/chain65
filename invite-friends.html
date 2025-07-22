@@ -19,214 +19,202 @@
       position: fixed;
       top: 0;
       width: 100%;
-      padding: 2px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #000000;
-      color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgb(255, 255, 255);
+      padding: 10px 0;
+      background: #000;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.2rem;
       z-index: 10;
+      box-shadow: 0 0 5px #fff;
     }
     .container {
-      max-width: 500px;
-      margin: 60px auto 80px; /* top margin for fixed header, bottom for footer */
+      max-width: 480px;
+      margin: 70px auto 90px;
       padding: 20px;
-    }
-    .card {
       background: #111;
       border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
+      box-shadow: 0 0 15px #fff;
     }
     .stat-box {
       display: flex;
       justify-content: space-between;
-      margin: 15px 0;
+      margin-bottom: 20px;
+      gap: 15px;
     }
     .stat {
-      background: #6b6a6a50;
+      flex: 1;
+      background: #222;
       padding: 15px;
       border-radius: 8px;
-      flex: 1;
-      margin: 0 5px;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
+      box-shadow: 0 0 8px #aaa;
     }
     .stat-value {
-      font-size: 24px;
-      color: #ffffff;
+      font-size: 1.8rem;
       font-weight: bold;
+      margin-bottom: 5px;
     }
     .stat-label {
-      font-size: 12px;
-      color: #ffffff;
+      font-size: 0.9rem;
+      color: #bbb;
     }
     .referral-link {
-      margin: 20px 0;
+      margin-bottom: 20px;
     }
     .referral-link input {
       width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      background: #c7c4c4;
-      color: rgb(0, 0, 0);
-      text-align: center;
-      margin-bottom: 10px;
+      padding: 12px;
       font-weight: bold;
-    }
-    .btn {
-      background: #494848;
-      color: white;
-      border: none;
-      padding: 10px;
       border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 25%;
-      margin: 5px 0;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
-      transition: all 0.3s;
-    }
-    .btn:hover {
-      opacity: 0.9;
+      border: none;
+      text-align: center;
+      user-select: all;
     }
     .btn-copy {
-      background: #5e5d5d;
+      background: #444;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 0 8px #888;
+      margin-top: 10px;
+      width: 100%;
+      transition: background-color 0.3s;
     }
-    .btn-share {
-      background: #555454;
+    .btn-copy:hover {
+      background: #666;
     }
     .share-buttons {
       display: flex;
+      justify-content: space-between;
       gap: 10px;
       margin-top: 15px;
-      justify-content: center;
     }
     .share-btn {
       flex: 1;
-      padding: 10px;
-      border-radius: 5px;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      padding: 10px 5px;
+      border-radius: 6px;
       font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #555;
+      color: #fff;
       user-select: none;
-      background: #222;
       transition: background-color 0.3s;
+      font-size: 0.9rem;
     }
-    .share-btn:hover {
-      background: #555;
+    .share-btn i {
+      font-size: 1.3rem;
     }
     .whatsapp {
       background: #25d366;
     }
+    .whatsapp:hover {
+      background: #1ebe57;
+    }
     .telegram {
       background: #0088cc;
     }
+    .telegram:hover {
+      background: #006f9a;
+    }
     .facebook {
       background: #3b5998;
+    }
+    .facebook:hover {
+      background: #2d4373;
     }
     .footer {
       position: fixed;
       bottom: 0;
       width: 100%;
       background: #000;
-      padding: 10px 0;
       display: flex;
       justify-content: space-around;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
+      padding: 12px 0;
+      box-shadow: 0 0 8px #fff;
       z-index: 10;
     }
     .nav-item {
-      text-decoration: none;
       color: white;
-      font-size: 12px;
-      padding: 8px;
-      background: #111;
+      text-decoration: none;
+      font-size: 0.9rem;
+      background: #222;
+      padding: 8px 12px;
       border-radius: 5px;
-      width: 80px;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
+      box-shadow: 0 0 8px #444;
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 6px;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .nav-item:hover {
+      background: #444;
     }
     .popup {
       position: fixed;
-      bottom: 20px;
+      bottom: 70px;
       left: 50%;
       transform: translateX(-50%);
-      background: #000000;
-      color: white;
+      background: #222;
+      color: #fff;
       padding: 10px 20px;
-      box-shadow: 0 4px 15px rgb(255, 255, 255);
-      border-radius: 5px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #555;
       display: none;
-      z-index: 100;
+      z-index: 9999;
+      font-weight: bold;
+      user-select: none;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h2>Chain65 Referral</h2>
-  </div>
+
+  <div class="header">Chain65 Referral</div>
 
   <div class="container">
-    <div class="card">
-      <h3>Your Referral Stats</h3>
-      <div class="stat-box">
-        <div class="stat">
-          <div class="stat-value" id="referralCount">0</div>
-          <div class="stat-label">Friends Invited</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="referralBonus">0 C65</div>
-          <div class="stat-label">Bonus Earned</div>
-        </div>
+
+    <div class="stat-box">
+      <div class="stat">
+        <div class="stat-value" id="referralCount">0</div>
+        <div class="stat-label">Friends Invited</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="referralBonus">0 C65</div>
+        <div class="stat-label">Bonus Earned</div>
       </div>
     </div>
 
-    <div class="card">
-      <h3>Your Referral Link</h3>
-      <div class="referral-link">
-        <input type="text" id="referralLink" readonly />
-        <button class="btn btn-copy" onclick="copyReferralLink()">Copy Link</button>
-      </div>
-      <p>Share your link and earn rewards when friends join!</p>
+    <div class="referral-link">
+      <input type="text" id="referralLink" readonly />
+      <button class="btn-copy" onclick="copyReferralLink()">Copy Referral Link</button>
+    </div>
 
-      <div class="share-buttons">
-        <div class="share-btn whatsapp" onclick="shareWhatsApp()">
-          <i class="fab fa-whatsapp"></i> WhatsApp
-        </div>
-        <div class="share-btn telegram" onclick="shareTelegram()">
-          <i class="fab fa-telegram"></i> Telegram
-        </div>
-        <div class="share-btn facebook" onclick="shareFacebook()">
-          <i class="fab fa-facebook-f"></i> Facebook
-        </div>
+    <div class="share-buttons">
+      <div class="share-btn whatsapp" onclick="shareWhatsApp()">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </div>
+      <div class="share-btn telegram" onclick="shareTelegram()">
+        <i class="fab fa-telegram"></i> Telegram
+      </div>
+      <div class="share-btn facebook" onclick="shareFacebook()">
+        <i class="fab fa-facebook-f"></i> Facebook
       </div>
     </div>
+
   </div>
 
   <div class="popup" id="popup">Link Copied!</div>
 
   <div class="footer">
-    <a class="nav-item" href="home.html">
-      <i class="fas fa-home"></i> Home
-    </a>
-    <a class="nav-item" href="invite-friends.html">
-      <i class="fas fa-user-friends"></i> Friends
-    </a>
-    <a class="nav-item" href="white-paper.html">
-      <i class="fas fa-file-alt"></i> White paper
-    </a>
+    <a href="home.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+    <a href="invite-friends.html" class="nav-item"><i class="fas fa-user-friends"></i> Friends</a>
+    <a href="white-paper.html" class="nav-item"><i class="fas fa-file-alt"></i> White paper</a>
   </div>
 
   <script type="module">
@@ -250,6 +238,7 @@
     let currentUserId = null;
     let userData = null;
 
+    // Anonymous sign-in
     signInAnonymously(auth)
       .then(() => console.log("Signed in anonymously"))
       .catch(error => console.error("Auth error:", error));
@@ -290,7 +279,6 @@
 
     function updateUI() {
       if (!userData) return;
-
       document.getElementById("referralCount").textContent = userData.referrals || 0;
       document.getElementById("referralBonus").textContent = (userData.referralBonus || 0).toFixed(5) + " C65";
 
@@ -301,15 +289,18 @@
     window.copyReferralLink = function () {
       const referralLink = document.getElementById("referralLink");
       referralLink.select();
-      document.execCommand("copy");
-      showPopup("Link copied!");
+      referralLink.setSelectionRange(0, 99999); // For mobile devices
+      navigator.clipboard.writeText(referralLink.value).then(() => {
+        showPopup("Referral link copied!");
+      }).catch(() => {
+        alert("Failed to copy link. Please copy manually.");
+      });
     };
 
     window.shareWhatsApp = function () {
       const link = document.getElementById("referralLink").value;
-      const message = "Join Chain65 and earn crypto!";
-      // WhatsApp sharing with message and link separated properly
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}%20${encodeURIComponent(link)}`, "_blank");
+      // Share only the link for WhatsApp so preview shows properly
+      window.open(`https://wa.me/?text=${encodeURIComponent(link)}`, "_blank");
     };
 
     window.shareTelegram = function () {
@@ -333,5 +324,6 @@
       }, 2000);
     }
   </script>
+
 </body>
 </html>
