@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Invite Friends | Chain65</title>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
@@ -28,10 +28,9 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgb(255, 255, 255);
     }
-
     .container {
       max-width: 500px;
-      margin: 20px auto;
+      margin: 70px auto 20px;
       padding: 20px;
     }
     .card {
@@ -67,7 +66,7 @@
       margin: 20px 0;
     }
     .referral-link input {
-      width: 100%;
+      width: 80%;
       padding: 10px;
       border-radius: 5px;
       border: none;
@@ -75,6 +74,7 @@
       color: rgb(0, 0, 0);
       text-align: center;
       margin-bottom: 10px;
+      user-select: all;
     }
     .btn {
       background: #494848;
@@ -95,9 +95,6 @@
     .btn-copy {
       background: #5e5d5d;
     }
-    .btn-share {
-      background: #555454;
-    }
     .share-buttons {
       display: flex;
       gap: 10px;
@@ -111,15 +108,9 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgb(255, 255, 255);
     }
-    .whatsapp {
-      background: #000000;
-    }
-    .telegram {
-      background: #000000;
-    }
-    .facebook {
-      background: #000000;
-    }
+    .whatsapp { background: #000000; }
+    .telegram { background: #000000; }
+    .facebook { background: #000000; }
     .footer {
       position: fixed;
       bottom: 0;
@@ -157,7 +148,8 @@
 </head>
 <body>
   <div class="header">
-    
+    <div id="username" class="user-id"></div>
+    <div id="userReferralCode"></div>
   </div>
 
   <div class="container">
@@ -178,57 +170,43 @@
     <div class="card">
       <h3>Your Referral Link</h3>
       <div class="referral-link">
-        <input type="text" id="referralLink" readonly>
+        <input type="text" id="referralLink" readonly />
         <button class="btn btn-copy" onclick="copyReferralLink()">Copy Link</button>
       </div>
-    <p class="note">* WhatsApp/Facebook sharing may not work inside Telegram app. Open in browser for full features.</p>
+      <p class="note" WhatsApp/Facebook sharing may not work inside Telegram app. Open in browser for full features.</p>
     </div>
-      
-      <div class="share-buttons">
-        <div class="share-btn whatsapp" onclick="shareWhatsApp()">
-          <i class="fab fa-whatsapp"></i> WhatsApp
-        </div>
-        <div class="share-btn telegram" onclick="shareTelegram()">
-          <i class="fab fa-telegram"></i> Telegram 
-        </div>
-        <div class="share-btn facebook" onclick="shareFacebook()">
-          <i class="fab fa-facebook"></i> Facebook
-        </div>
+
+    <div class="share-buttons">
+      <div class="share-btn whatsapp" onclick="shareWhatsApp()">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </div>
+      <div class="share-btn telegram" onclick="shareTelegram()">
+        <i class="fab fa-telegram"></i> Telegram
+      </div>
+      <div class="share-btn facebook" onclick="shareFacebook()">
+        <i class="fab fa-facebook"></i> Facebook
       </div>
     </div>
-  </div>
-
-  <div class="copy-url-section">
-      <button onclick="copyReferralLink()">🔗 Copy Referral URL</button>
-    </div>
-
-    <p>Referrals: <span id="refCount">0</span></p>
   </div>
 
   <div class="popup" id="popup">Link Copied!</div>
 
-
   <div class="footer">
-    <a class="nav-item" href="home.html">
-      <i class="fas fa-home"></i> Home
-    </a>
-    <a class="nav-item" href="invite-friends.html">
-      <i class="fas fa-user-friends"></i> Friends
-    </a>
-    <a class="nav-item" href="white-paper.html">
-      <i class="fas fa-tasks"></i> White paper
-    </a>
+    <a class="nav-item" href="home.html"><i class="fas fa-home"></i> Home</a>
+    <a class="nav-item" href="invite-friends.html"><i class="fas fa-user-friends"></i> Friends</a>
+    <a class="nav-item" href="white-paper.html"><i class="fas fa-tasks"></i> White paper</a>
   </div>
 
   <!-- Firebase SDK -->
-<script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
     import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyC2klHcVeyNOl5etmxb0N9hZlBUCN-g6YA",
       authDomain: "chain-65-network.firebaseapp.com",
+      databaseURL: "https://chain-65-network-default-rtdb.firebaseio.com",
       projectId: "chain-65-network",
       storageBucket: "chain-65-network.appspot.com",
       messagingSenderId: "1044867567779",
@@ -236,42 +214,80 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db = getDatabase(app);
     const auth = getAuth(app);
 
     let currentUserId = null;
     let userData = null;
 
-    // Initialize auth
     signInAnonymously(auth)
       .then(() => console.log("Signed in anonymously"))
       .catch(error => console.error("Auth error:", error));
 
-    // Track auth state
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUserId = user.uid;
-        await loadUserData();
+        await createUserInDB(currentUserId);
+        await loadUserData(currentUserId);
+
+        await checkReferralCode();  // Check referral and update DB if needed
+
         updateUI();
       }
     });
 
-    async function loadUserData() {
-      const userRef = doc(db, "users", currentUserId);
-      const userSnap = await getDoc(userRef);
-      
-      if (userSnap.exists()) {
-        userData = userSnap.data();
-      } else {
-        // Create user if doesn't exist
-        await setDoc(userRef, {
-          createdAt: new Date(),
-          referralCode: generateReferralCode(),
+    async function createUserInDB(uid) {
+      const userRef = ref(db, `users/${uid}`);
+      const snapshot = await get(userRef);
+      if (!snapshot.exists()) {
+        const referralCode = generateReferralCode();
+        await set(userRef, {
+          referralCode: referralCode,
           referrals: 0,
-          referralBonus: 0
+          referralBonus: 0,
+          createdAt: new Date().toISOString()
         });
-        userData = (await getDoc(userRef)).data();
+        await set(ref(db, `referralCodes/${referralCode}`), uid);
       }
+    }
+
+    async function loadUserData(uid) {
+      const snapshot = await get(ref(db, `users/${uid}`));
+      if (snapshot.exists()) {
+        userData = snapshot.val();
+      }
+    }
+
+    async function checkReferralCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get("ref");
+
+      if (refCode && refCode !== userData?.referralCode) {
+        const refCodeSnapshot = await get(ref(db, `referralCodes/${refCode}`));
+        if (refCodeSnapshot.exists()) {
+          const referrerUid = refCodeSnapshot.val();
+          const referrerRef = ref(db, `users/${referrerUid}`);
+
+          const referrerSnap = await get(referrerRef);
+          if (referrerSnap.exists()) {
+            const referrerData = referrerSnap.val();
+            await set(referrerRef, {
+              ...referrerData,
+              referrals: (referrerData.referrals || 0) + 1,
+              referralBonus: (referrerData.referralBonus || 0) + 1
+            });
+          }
+        }
+      }
+    }
+
+    function updateUI() {
+      if (!userData) return;
+      document.getElementById("referralCount").textContent = userData.referrals || 0;
+      document.getElementById("referralBonus").textContent = (userData.referralBonus || 0).toFixed(5) + " C65";
+
+      const currentUrl = window.location.href.split("?")[0].replace("invite-friends.html", "");
+      document.getElementById("referralLink").value = `${currentUrl}?ref=${userData.referralCode}`;
     }
 
     function generateReferralCode() {
@@ -283,72 +299,38 @@
       return result;
     }
 
-    function updateUI() {
-      if (!userData) return;
-      
-      document.getElementById("referralCount").textContent = userData.referrals || 0;
-      document.getElementById("referralBonus").textContent = (userData.referralBonus || 0).toFixed(5) + " C65";
-      
-      const currentUrl = window.location.href.split('?')[0].replace('invite-friends.html', '');
-      document.getElementById("referralLink").value = `${currentUrl}?ref=${userData.referralCode}`;
-    }
-
     const referralBase = "https://t.me/Chain65bot";
 
-  let userRefCode = localStorage.getItem("userRefCode");
-  if (!userRefCode) {
-    userRefCode = "ref_" + Math.random().toString(36).substring(2, 10);
-    localStorage.setItem("userRefCode", userRefCode);
-  }
+    // These functions open share links in new tabs or native apps if possible
+    window.shareWhatsApp = function () {
+      const fullMessage = `🚀 Join Chain65 and earn rewards! 💰 ${referralBase}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(fullMessage)}`, "_blank");
+    };
 
-  const referralUrl = `${referralBase}?start=${userRefCode}`;
-  const encodedReferral = encodeURIComponent(referralUrl);
-  const shareMessage = `🚀 Join Chain65 and earn rewards! 💰`;
+    window.shareTelegram = function () {
+      const telegramShareURL = `https://t.me/share/url?url=${encodeURIComponent(referralBase)}&text=${encodeURIComponent("🚀 Join Chain65 and earn rewards! 💰")}`;
+      window.open(telegramShareURL, "_blank");
+    };
 
-  window.shareWhatsApp = function() {
-    const fullMessage = `${shareMessage} ${referralUrl}`;
-    if (window.Android && window.Android.shareWhatsApp) {
-      window.Android.shareWhatsApp(fullMessage);
-    } else {
-      window.open(`https://wa.me/?text=${encodeURIComponent(fullMessage)}`, '_blank');
+    window.shareFacebook = function () {
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralBase)}`;
+      window.open(fbUrl, "_blank");
+    };
+
+    window.copyReferralLink = function () {
+      const link = document.getElementById("referralLink").value;
+      navigator.clipboard.writeText(link)
+        .then(() => showPopup())
+        .catch(() => alert("Failed to copy link. Try manually."));
+    };
+
+    function showPopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "block";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 2000);
     }
-  }
-
-   window.shareTelegram = function() {
-    const telegramShareURL = `https://t.me/share/url?url=${encodedReferral}&text=${encodeURIComponent(shareMessage)}`;
-    if (window.Android && window.Android.shareTelegram) {
-      window.Android.shareTelegram(`${shareMessage}\n${referralUrl}`);
-    } else if (window.Telegram && Telegram.WebApp) {
-      Telegram.WebApp.openTelegramLink(telegramShareURL);
-    } else {
-      window.open(telegramShareURL, '_blank');
-    }
-  }
-  
-
-  window.shareFacebook = function() {
-    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedReferral}`;
-    if (window.Android && window.Android.shareFacebook) {
-      window.Android.shareFacebook(`${shareMessage}\n${referralUrl}`);
-    } else {
-      window.open(fbUrl, '_blank');
-    }
-  }
-  
-
-  window.copyReferralLink = function() {
-    navigator.clipboard.writeText(referralUrl)
-      .then(() => showPopup())
-      .catch(() => alert('Failed to copy link. Try manually.'));
-  }
-
-  function showPopup(message) {
-    const popup = document.getElementById("popup");
-    popup.style.display = "block";
-    setTimeout(() => {
-      popup.style.display = "none";
-    }, 2000);
-  }
   </script>
 </body>
 </html>
