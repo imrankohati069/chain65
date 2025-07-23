@@ -181,7 +181,8 @@
         <input type="text" id="referralLink" readonly>
         <button class="btn btn-copy" onclick="copyReferralLink()">Copy Link</button>
       </div>
-      <p>Share your link and earn rewards when friends join!</p>
+    <p class="note">* WhatsApp/Facebook sharing may not work inside Telegram app. Open in browser for full features.</p>
+    </div>
       
       <div class="share-buttons">
         <div class="share-btn whatsapp" onclick="shareWhatsApp()">
@@ -197,7 +198,15 @@
     </div>
   </div>
 
+  <div class="copy-url-section">
+      <button onclick="copyReferralLink()">🔗 Copy Referral URL</button>
+    </div>
+
+    <p>Referrals: <span id="refCount">0</span></p>
+  </div>
+
   <div class="popup" id="popup">Link Copied!</div>
+
 
   <div class="footer">
     <a class="nav-item" href="home.html">
@@ -284,36 +293,62 @@
       document.getElementById("referralLink").value = `${currentUrl}?ref=${userData.referralCode}`;
     }
 
-    window.copyReferralLink = function() {
-      const referralLink = document.getElementById("referralLink");
-      referralLink.select();
-      document.execCommand("copy");
-      showPopup("Link copied!");
-    };
+    const referralBase = "https://t.me/Chain65bot";
 
-    window.shareWhatsApp = function() {
-      const link = document.getElementById("referralLink").value;
-      const message = `Join Chain65 and earn crypto! Use my referral link: ${link}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-    };
+  let userRefCode = localStorage.getItem("userRefCode");
+  if (!userRefCode) {
+    userRefCode = "ref_" + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem("userRefCode", userRefCode);
+  }
 
-    window.shareTelegram = function() {
-      window.open("https://t.me/Chain65bot", "_blank");
-    };
+  const referralUrl = `${referralBase}?start=${userRefCode}`;
+  const encodedReferral = encodeURIComponent(referralUrl);
+  const shareMessage = `🚀 Join Chain65 and earn rewards! 💰`;
 
-    window.shareFacebook = function() {
-      const link = document.getElementById("referralLink").value;
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank');
-    };
-
-    function showPopup(message) {
-      const popup = document.getElementById("popup");
-      popup.textContent = message;
-      popup.style.display = "block";
-      setTimeout(() => {
-        popup.style.display = "none";
-      }, 2000);
+  window.shareWhatsApp = function() {
+    const fullMessage = `${shareMessage} ${referralUrl}`;
+    if (window.Android && window.Android.shareWhatsApp) {
+      window.Android.shareWhatsApp(fullMessage);
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(fullMessage)}`, '_blank');
     }
+  }
+
+   window.shareTelegram = function() {
+    const telegramShareURL = `https://t.me/share/url?url=${encodedReferral}&text=${encodeURIComponent(shareMessage)}`;
+    if (window.Android && window.Android.shareTelegram) {
+      window.Android.shareTelegram(`${shareMessage}\n${referralUrl}`);
+    } else if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.openTelegramLink(telegramShareURL);
+    } else {
+      window.open(telegramShareURL, '_blank');
+    }
+  }
+  
+
+  window.shareFacebook = function() {
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedReferral}`;
+    if (window.Android && window.Android.shareFacebook) {
+      window.Android.shareFacebook(`${shareMessage}\n${referralUrl}`);
+    } else {
+      window.open(fbUrl, '_blank');
+    }
+  }
+  
+
+  window.copyReferralLink = function() {
+    navigator.clipboard.writeText(referralUrl)
+      .then(() => showPopup())
+      .catch(() => alert('Failed to copy link. Try manually.'));
+  }
+
+  function showPopup(message) {
+    const popup = document.getElementById("popup");
+    popup.style.display = "block";
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 2000);
+  }
   </script>
 </body>
 </html>
