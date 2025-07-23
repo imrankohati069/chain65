@@ -120,6 +120,7 @@
       cursor: pointer;
     }
 
+
     .popup {
       position: fixed;
       top: 0;
@@ -227,14 +228,27 @@
   </div>
 
   <!-- Support Popup -->
-  <div class="popup" id="supportPopup">
-    <div class="popup-content">
-      <h3>Support</h3>
-      <p>If you have questions, contact us at:</p>
-      <p><strong>Email:</strong> <a style="color:orange" href="mailto:chain65contact@gmail.com" style="color:orange">chain65contact@gmail.com</a></p>
-      <button onclick="togglePopup('supportPopup')">Close</button>
-    </div>
+<div class="popup" id="supportPopup" style="display: none;">
+  <div class="popup-content" style="
+    background: #111;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(255,255,255,0.7);
+  ">
+    <h3>Support</h3>
+    <p>If you have questions, contact us at:</p>
+    <p><strong>Email:</strong>
+      <a href="mailto:chain65contact@gmail.com" style="color:orange;">
+        chain65contact@gmail.com
+      </a>
+    </p>
+    <button class="btn" onclick="togglePopup('supportPopup')">Close</button>
   </div>
+</div>
+
 
   <!-- Wallet Popup -->
   <div class="popup" id="walletPopup">
@@ -428,7 +442,7 @@
       const popup = document.getElementById(id);
       popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
     }
-
+  
     // Close popups when clicking outside
     document.querySelectorAll('.popup').forEach(popup => {
       popup.addEventListener('click', function(e) {
